@@ -2,33 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="10dp"
     android:orientation="horizontal">
-<ImageView
-    android:layout_width="0dp"
-    android:layout_height="60dp"
-    android:id="@+id/avatar_iv"
-    tools:src="@mipmap/ic_avatar"
-    android:layout_weight="2"/>
+
+    <ImageView
+        android:id="@+id/avatar_iv"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="2"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_avatar" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/account_tv"/>
+            android:id="@+id/account_tv"
+            style="@style/ItemStyle"
+           />
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/name_tv"/>
+            android:id="@+id/name_tv"
+            style="@style/ItemStyle"
+            />
     </LinearLayout>
+
     <ImageView
-        android:src="@drawable/ic_married"
+        android:id="@+id/married_iv"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:id="@+id/married_iv"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:layout_gravity="center"/>
+        android:baselineAligned="false"
+        android:src="@drawable/ic_married" />
 </LinearLayout>

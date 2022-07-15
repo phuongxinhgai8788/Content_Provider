@@ -1,6 +1,7 @@
 package com.example.gamtrainer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -59,9 +60,13 @@ public class TrainerFragment extends Fragment {
     private ImageButton takePhotoImageBtn;
     private ImageView avatarIV;
     private TrainerDetailViewModel trainerDetailViewModel;
+    private Callbacks callbacks;
 
     private UUID trainerUUID;
 
+    interface Callbacks{
+        void requestPermission();
+    }
     public TrainerFragment() {
         // Required empty public constructor
     }
@@ -72,6 +77,12 @@ public class TrainerFragment extends Fragment {
         args.putSerializable(ARG_TRAINER_ID, param1);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        callbacks = (Callbacks) context;
     }
 
     @Override
@@ -120,7 +131,7 @@ public class TrainerFragment extends Fragment {
 
     private void updateUI() {
         accountET.setText(trainer.getAccount());
-        nameET.setText(trainer.getAccount());
+        nameET.setText(trainer.getName());
         phoneET.setText(trainer.getPhoneNumber());
         marriedCheckBox.setChecked(trainer.getGetMarried());
         marriedCheckBox.jumpDrawablesToCurrentState();
@@ -224,7 +235,7 @@ public class TrainerFragment extends Fragment {
         });
 
         callBtn.setOnClickListener( v -> {
-
+            callbacks.requestPermission();
         });
 
 
@@ -266,7 +277,7 @@ public class TrainerFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        trainerDetailViewModel.saveTrainer(trainer);
+        trainerDetailViewModel.updateTrainer(trainer);
     }
 
     @Override

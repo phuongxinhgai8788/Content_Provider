@@ -2,6 +2,7 @@ package com.example.gamtrainer.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -20,5 +21,8 @@ public interface TrainerDao {
     LiveData<Trainer> getTrainer(UUID id);
 
     @Update
-    void saveTrainer(Trainer trainer);
+    void updateTrainer(Trainer trainer);
+
+    @Insert
+    void addTrainer(Trainer trainer);
 }

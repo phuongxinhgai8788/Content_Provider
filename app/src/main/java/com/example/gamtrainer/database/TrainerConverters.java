@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.UUID;
 
 public class TrainerConverters {
-    @TypeConverter
-    public Long fromDate(Date date){
-        return date.getTime();
-    }
-
-    @TypeConverter
-    public Date toDate(Long milisSinceEpoch){
-        return new Date(milisSinceEpoch);
-    }
+//    @TypeConverter
+//    public Long fromDate(Date date){
+//        return date.getTime();
+//    }
+//
+//    @TypeConverter
+//    public Date toDate(Long milisSinceEpoch){
+//        return new Date(milisSinceEpoch);
+//    }
 
     @TypeConverter
     public UUID toUUID(String uuid){

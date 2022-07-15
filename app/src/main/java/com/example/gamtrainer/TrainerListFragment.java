@@ -2,9 +2,12 @@ package com.example.gamtrainer;
 
 import static java.util.Collections.emptyList;
 
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,19 +26,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 public class TrainerListFragment extends Fragment {
 
-    private TrainerListViewModel mViewModel;
+    private TrainerListViewModel trainerListViewModel;
     private RecyclerView trainerRecyclerView;
     private TrainerAdapter adapter = new TrainerAdapter(emptyList());
 
     private Context context;
     private Callbacks callback = null;
 
-    interface Callbacks {
+    public interface Callbacks {
         void onTrainerSelected(UUID trainerId);
     }
     public static TrainerListFragment newInstance() {
@@ -68,14 +72,14 @@ public class TrainerListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(TrainerListViewModel.class);
+        trainerListViewModel = new ViewModelProvider(this).get(TrainerListViewModel.class);
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mViewModel.trainerListLiveData.observe(getViewLifecycleOwner(), trainers -> {
+        trainerListViewModel.trainerListLiveData.observe(getViewLifecycleOwner(), trainers -> {
             if(trainers!=null && trainers.size()>0){
                 updateUI(trainers);
                 Log.i("TrainerListFragment", "There is trainer in db");
@@ -104,7 +108,7 @@ public class TrainerListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
        if(item.getItemId() == R.id.new_trainer){
            Trainer trainer = new Trainer();
-           mViewModel.addTrainer(trainer);
+           trainerListViewModel.addTrainer(trainer);
            callback.onTrainerSelected(trainer.getId());
            return true;
        } else{
@@ -116,14 +120,16 @@ public class TrainerListFragment extends Fragment {
 
         private Trainer trainer;
         private TextView accountTV, nameTV;
-        private ImageView marriedIV;
+        private ImageView marriedIV, avatarIV;
+        private File photoFile;
+        private Uri photoUri;
 
         public TrainerHolder(@NonNull View itemView) {
             super(itemView);
             accountTV = itemView.findViewById(R.id.account_tv);
             nameTV = itemView.findViewById(R.id.name_tv);
             marriedIV = itemView.findViewById(R.id.married_iv);
-
+            avatarIV = itemView.findViewById(R.id.avatar_iv);
             itemView.setOnClickListener(TrainerHolder.this);
         }
 
@@ -137,12 +143,27 @@ public class TrainerListFragment extends Fragment {
             accountTV.setText(trainer.getAccount());
             nameTV.setText(trainer.getName());
 
-            if(trainer.getGetMarried()){
-                marriedIV.setVisibility(View.VISIBLE);
-            }else{
-                marriedIV.setVisibility(View.GONE);
+            if(!trainer.getGetMarried()) {
+                marriedIV.setImageDrawable(null);
             }
+//            }else{
+//                marriedIV.setVisibility(View.GONE);
+//            }
+            photoFile = trainerListViewModel.getPhotoFile(trainer);
+            photoUri = FileProvider.getUriForFile(requireActivity(), "com.example.gamtrainer.fileprovider", photoFile);
+            updatePhotoView();
         }
+
+        private void updatePhotoView() {
+            if(photoFile.exists()) {
+                Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), requireActivity());
+                avatarIV.setImageBitmap(bitmap);
+            }
+//            }else{
+//                avatarIV.setImageDrawable(null);
+//            }
+        }
+
     }
 
     private class TrainerAdapter extends RecyclerView.Adapter<TrainerHolder>{
@@ -163,6 +184,7 @@ public class TrainerListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TrainerHolder holder, int position) {
             Trainer trainer = trainers.get(position);
+            holder.bind(trainer);
         }
 
         @Override

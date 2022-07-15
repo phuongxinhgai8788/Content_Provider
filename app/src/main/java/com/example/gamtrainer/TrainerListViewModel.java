@@ -3,14 +3,19 @@ package com.example.gamtrainer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.File;
 import java.util.List;
 
 public class TrainerListViewModel extends ViewModel {
-    private TrainerRepository trainerRepository = TrainerRepository.get();
+    private Repository trainerRepository = Repository.get();
 
     LiveData<List<Trainer>> trainerListLiveData = trainerRepository.getTrainers();
 
     public void addTrainer(Trainer trainer){
-        trainerRepository.saveTrainer(trainer);
+        trainerRepository.addTrainer(trainer);
+    }
+
+    public File getPhotoFile(Trainer trainer) {
+       return trainerRepository.getPhotoFile(trainer);
     }
 }
