@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Repository {
+    private static final String TAG = "Repository";
     private static Repository instance;
     private TrainerDao trainerDao;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -81,7 +82,7 @@ public class Repository {
                 contact.setName(name);
                 contact.setPhoneNumber(phoneNo);
                 contact.setPhotoUri(photoUri);
-
+                Log.i(TAG, contact.toString());
                 contacts.add(contact);
 
             }

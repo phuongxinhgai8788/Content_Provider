@@ -25,6 +25,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,9 +143,8 @@ public class TrainerFragment extends Fragment {
     private void updatePhotoView() {
         if(photoFile.exists()){
             Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), requireActivity());
+            Log.i(TAG, photoFile.getPath());
             avatarIV.setImageBitmap(bitmap);
-        }else{
-            avatarIV.setImageDrawable(null);
         }
     }
 
@@ -213,19 +213,6 @@ public class TrainerFragment extends Fragment {
 
         sendEmailBtn.setOnClickListener(view -> {
 
-//            String[] TO = {accountET.getText().toString()+"@fsoft.com.vn"};
-//            String SUBJECT = "[HN22_FR_ANDROID_03]";
-//            Intent intent = new Intent(Intent.ACTION_SEND);
-//            intent.setType("text/plain")
-//                    .setData(Uri.parse("Mail to: "))
-//                    .putExtra(Intent.EXTRA_EMAIL, TO)
-//                    .putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
-//
-//            try {
-//                startActivity(Intent.createChooser(intent, "Send mail..."));
-//            } catch (android.content.ActivityNotFoundException ex) {
-//                Toast.makeText(requireContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
-//            }
             Intent intent = new Intent(Intent.ACTION_SEND)
                     .setType("text/plain")
                     .putExtra(Intent.EXTRA_TEXT, "SOME TEXT")

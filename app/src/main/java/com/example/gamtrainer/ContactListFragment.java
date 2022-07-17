@@ -1,6 +1,8 @@
 package com.example.gamtrainer;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +94,7 @@ public class ContactListFragment extends Fragment {
         private Contact contact;
         private TextView phoneTV, nameTV;
         private ImageView avatarIV;
-//        private File photoFile;
-//        private Uri photoUri;
+
 
 
         public ContactHolder(@NonNull View itemView) {
@@ -100,18 +102,29 @@ public class ContactListFragment extends Fragment {
             phoneTV = itemView.findViewById(R.id.contact_number);
             nameTV = itemView.findViewById(R.id.contact_name);
             avatarIV = itemView.findViewById(R.id.contact_avatar);
-            itemView.setOnClickListener(ContactHolder.this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
 
-        }
+                String phoneNumber = contact.getPhoneNumber();
+                Uri phoneUri = Uri.parse("tel:"+phoneNumber);
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(phoneUri);
+                startActivity(callIntent);
+
+            }
 
         public void bind(Contact contact){
             this.contact = contact;
             phoneTV.setText(contact.getPhoneNumber());
             nameTV.setText(contact.getName());
+            if(contact.getPhotoUri()!=null){
+                String stringURI = contact.getPhotoUri();
+                Uri uri = Uri.parse(stringURI);
+                avatarIV.setImageURI(uri);
+            }
         }
     }
     private class ContactListAdapter extends RecyclerView.Adapter<ContactHolder>{

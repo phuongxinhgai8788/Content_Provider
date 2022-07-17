@@ -30,4 +30,12 @@ public class Contact {
         this.photoUri = photoUri;
     }
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", photoUri='" + photoUri + '\'' +
+                '}';
+    }
 }
